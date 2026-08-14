@@ -109,6 +109,12 @@ func buildMux(srv *Service) http.Handler {
 			writeError(w, badRequest("'keys' must not be empty"))
 			return
 		}
+		for _, k := range req.Keys {
+			if strings.TrimSpace(k) == "" {
+				writeError(w, badRequest("each key must be a non-empty string"))
+				return
+			}
+		}
 		owners, err := srv.Owners(req.Keys)
 		if err != nil {
 			writeError(w, err)
